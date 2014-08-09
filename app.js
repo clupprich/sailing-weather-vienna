@@ -6,9 +6,11 @@ var redis   = require('redis');
 var url     = require('url');
 var q       = require('q');
 
-var redisURL = url.parse(process.env.REDISCLOUD_URL || '127.0.0.1:6379');
+var redisURL = url.parse(process.env.REDISCLOUD_URL || 'http://127.0.0.1:6379');
 var client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
-client.auth(redisURL.auth.split(':')[1]);
+if (redisURL.auth) {
+  client.auth(redisURL.auth.split(':')[1]);
+}
 
 var app    = express();
 var router = express.Router();
