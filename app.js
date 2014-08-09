@@ -2,10 +2,14 @@ var express = require('express');
 var logfmt  = require('logfmt');
 var request = require('request');
 var cheerio = require('cheerio');
-var redis   = require("redis");
+var redis   = require('redis');
+var url     = require('url');
 var q       = require('q');
 
-var client = redis.createClient();
+var redisURL = url.parse(process.env.REDISCLOUD_URL || '127.0.0.1:6379');
+var client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+client.auth(redisURL.auth.split(':')[1]);
+
 var app    = express();
 var router = express.Router();
 var port   = Number(process.env.PORT || 5000);
