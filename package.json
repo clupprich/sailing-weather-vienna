@@ -1,0 +1,15 @@
+{
+  "name": "sailing-weather-vienna",
+  "description": "Displays the sailing weather in Vienna.",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "cheerio": "^0.17.0",
+    "express": "~4.0.0",
+    "hiredis": "^0.1.17",
+    "logfmt": "^1.1.2",
+    "q": "^1.0.1",
+    "redis": "^0.11.0",
+    "request": "^2.40.0"
+  }
+}

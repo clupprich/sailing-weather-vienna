@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="de-at">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aktuelle Wetterinformationen für Segler auf der Alten Donau in Wien.">
+    <title>Segelwetter Alte Donau Wien</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css" />
+    <!--[if lt IE 9]>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="styles.css" />
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
+
+    <script id="item-template" type="text/x-handlebars-template">
+      <div class="pure-g">
+        <div class="l-box pure-u-1-4"></div>
+        <div class="l-box pure-u-1-8">
+          <p>{{time}}</p>
+        </div>
+        <div class="l-box pure-u-1-8">
+          <p>{{wind}}</p>
+        </div>
+        <div class="l-box pure-u-1-8">
+          <p>{{temperature}} °C</p>
+        </div>
+
+        <div class="l-box pure-u-1-8">
+          <p>{{weather}}</p>
+        </div>
+        <div class="l-box pure-u-1-4"></div>
+      </div>
+    </script>
+
+    <script>
+      $(function() {
+        $.get('/weather.json', function(data) {
+          var template = Handlebars.compile($('#item-template').html());
+
+          $.each(data, function(_, item) {
+            $('#items').append(template(item));
+          })
+        });
+      });
+    </script>
+  </head>
+  <body>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <h2 class="content-head is-center">Segelwetter <span>an der Alten Donau in Wien</span></h2>
+
+        <div id="items">
+
+        </div>
+
+      <div class="footer l-box is-center">
+        Mit &hearts; gemacht in Wien
+      </div>
+
+    </div>
+
+  </body>
+</html>
