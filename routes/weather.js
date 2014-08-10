@@ -1,20 +1,16 @@
-var express = require('express');
-var logfmt  = require('logfmt');
-var request = require('request');
-var cheerio = require('cheerio');
-var redis   = require('redis');
-var url     = require('url');
-var q       = require('q');
+var express = require('express')
+  , request = require('request')
+  , cheerio = require('cheerio')
+  , redis = require('redis')
+  , url = require('url')
+  , q = require('q')
 
+var router = express.Router();
 var redisURL = url.parse(process.env.REDISCLOUD_URL || 'http://127.0.0.1:6379');
 var client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
 if (redisURL.auth) {
   client.auth(redisURL.auth.split(':')[1]);
 }
-
-var app    = express();
-var router = express.Router();
-var port   = Number(process.env.PORT || 5000);
 
 loadData = function() {
   var deferred = q.defer();
@@ -61,14 +57,4 @@ router.get('/weather.json', function(req, res) {
   });
 });
 
-app.use(logfmt.requestLogger());
-app.use(express.static('public'));
-app.use('/', router);
-app.use(function(err, req, res, next){
-  console.error(err.stack);
-  res.send(500, 'Something broke!');
-});
-
-app.listen(port, function() {
-  console.log('Listening on ' + port);
-});
+module.exports = router;
