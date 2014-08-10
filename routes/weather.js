@@ -48,7 +48,7 @@ router.get('/weather.json', function(req, res) {
     if (reply == null) {
       loadData()
       .then(function(data) {
-        client.setex('weather-data-vienna', 60, JSON.stringify(data));
+        client.setex('weather-data-vienna', 60*10, JSON.stringify(data));
         res.json(data);
       })
     } else {
