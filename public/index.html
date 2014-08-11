@@ -9,8 +9,11 @@
     <!--[if lt IE 9]>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
     <![endif]-->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="weather-icons.css" />
+
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
 
@@ -26,16 +29,93 @@
         <div class="l-box pure-u-1-8">
           <p>{{temperature}} °C</p>
         </div>
-
         <div class="l-box pure-u-1-8">
-          <p>{{weather}}</p>
+          <p>{{{weather-icon weather}}}</p>
         </div>
-        <div class="l-box pure-u-1-4"></div>
+        <div class="l-box pure-u-1-8">
+          <p>{{direction-icon direction}}</p>
+        </div>
+        <div class="l-box pure-u-1-8"></div>
       </div>
     </script>
 
     <script>
       $(function() {
+        Handlebars.registerHelper('direction-icon', function(object) {
+          var icon;
+
+          switch (object) {
+            case 'N':
+              icon = 'wi-wind-north';
+              break;
+            case 'NO':
+              icon = 'wi-wind-north-east';
+              break;
+            case 'O':
+              icon = 'wi-wind-east';
+              break;
+            case 'SO':
+              icon = 'wi-wind-south-east';
+              break;
+            case 'S':
+              icon = 'wi-wind-south';
+              break;
+            case 'SW':
+              icon = 'wi-wind-south-west';
+              break;
+            case 'W':
+              icon = 'wi-wind-west';
+              break;
+            case 'NW':
+              icon = 'wi-wind-north-west';
+              break;
+            default:
+              return object;
+          }
+          return new Handlebars.SafeString(
+            '<div class="icon"><i class="wi ' + icon + '"></i></div>'
+          );
+        });
+
+        Handlebars.registerHelper('weather-icon', function(object) {
+          var icon;
+
+          switch (object) {
+            case 'wolkenlos':
+              icon = 'wi-day-sunny';
+              break;
+            case 'heiter':
+              icon = 'wi-day-sunny-overcast';
+              break;
+            case 'wolkig':
+              icon = 'wi-day-cloudy';
+              break;
+            case 'stark bewoelkt':
+              icon = 'wi-cloudy';
+              break;
+            case 'gewitter':
+              icon = 'wi-day-lightning';
+              break;
+            case 'leichter regen':
+              icon = 'wi-day-sprinkle';
+              break;
+            case 'maessiger regen':
+              icon = 'wi-day-rain';
+              break;
+            case 'regenschauer':
+              icon = 'wi-day-storm-showers';
+              break;
+            case 'bedeckt':
+              icon = 'wi-cloudy';
+              break;
+            default:
+              return object;
+          }
+          return new Handlebars.SafeString(
+            '<div class="icon"><i class="wi ' + icon + '"></i></div>'
+          );
+        });
+
         $.get('/weather.json', function(data) {
           var template = Handlebars.compile($('#item-template').html());
 
@@ -50,17 +130,17 @@
 
     <div class="content-wrapper">
       <div class="content">
-        <h2 class="content-head is-center">Segelwetter <span>an der Alten Donau in Wien</span></h2>
+        <h1 class="content-head">Segelwetter <span>an der Alten Donau in Wien</span></h1>
 
         <div id="items">
 
         </div>
       </div>
-      
-      <div class="footer l-box is-center">
-        Mit &hearts; gemacht in Wien
-      </div>
 
+    </div>
+
+    <div class="footer">
+      Mit &hearts; gemacht in Wien. &copy; 2014 Christoph Lupprich
     </div>
 
   </body>
