@@ -1,12 +1,11 @@
-var express = require('express')
-  , request = require('request')
-  , cheerio = require('cheerio')
-  , redis = require('redis')
+#!/usr/bin/env node
+var redis = require('redis')
   , url = require('url')
+  , cheerio = require('cheerio')
   , q = require('q')
-  , util = require('util');
+  , util = require('util')
+  , request = require('request');
 
-var router = express.Router();
 var redisURL = url.parse(process.env.REDISCLOUD_URL || 'http://127.0.0.1:6379');
 var client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
 if (redisURL.auth) {
@@ -67,18 +66,10 @@ loadData = function() {
   return deferred.promise;
 }
 
-router.get('/weather.json', function(req, res) {
-  client.get('weather-data-vienna', function(err, reply) {
-    if (reply == null) {
-      loadData()
-      .then(function(data) {
-        client.setex('weather-data-vienna', 60*10, JSON.stringify(data));
-        res.json(data);
-      })
-    } else {
-      res.json(JSON.parse(reply));
-    }
-  });
-});
+console.log('Fetching data...')
 
-module.exports = router;
+loadData().then(function(data) {
+  client.set('weather-data-vienna', JSON.stringify(data));
+  console.log('Fetched new weather data.')
+  process.exit(1);
+});
