@@ -16,15 +16,16 @@
 
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment.min.js"></script>
 
     <script id="item-template" type="text/x-handlebars-template">
       <div class="pure-g">
-        <div class="l-box pure-u-1-4"></div>
-        <div class="l-box pure-u-1-8">
-          <p>{{time}}</p>
+        <div class="l-box pure-u-1-8"></div>
+        <div class="l-box pure-u-1-4">
+          <p>{{nice-time time}}</p>
         </div>
         <div class="l-box pure-u-1-8">
-          <p>{{wind}}</p>
+          <p>{{wind}} B</p>
         </div>
         <div class="l-box pure-u-1-8">
           <p>{{temperature}} °C</p>
@@ -114,6 +115,21 @@
           return new Handlebars.SafeString(
             '<div class="icon"><i class="wi ' + icon + '"></i></div>'
           );
+        });
+
+        Handlebars.registerHelper('nice-time', function(time) {
+          return moment(time).calendar();
+        });
+
+        moment.locale('de', {
+          calendar : {
+            lastDay : '[Gestern um] HH:mm',
+            sameDay : '[Heute um] HH:mm',
+            nextDay : '[Morgen um] HH:mm',
+            lastWeek : '[letzen] dddd [um] HH:mm',
+            nextWeek : 'dddd [um] LT',
+            sameElse : 'L'
+          }
         });
 
         $.get('/weather.json', function(data) {
