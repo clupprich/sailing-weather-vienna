@@ -62,9 +62,9 @@ $colors: #fff #cff #9fc #9f9 #9f6 #9f0 #cf0 #ff0 #fc0 #f90 #f60 #f30 #f00;
 
 @for $i from 1 through 12 {
   .pure-u-#{$i}-12 {
-    width: $i * 100/12 + '%';
+    width: #{$i * 100/12}#{'%'};
     @if $i < 12 {
-      *width: $i * 100/12 - 0.00031 + '%';
+      *width: #{$i * 100/12 - 0.00031}#{'%'};
     }
 
     background: nth($colors, $i+1);
